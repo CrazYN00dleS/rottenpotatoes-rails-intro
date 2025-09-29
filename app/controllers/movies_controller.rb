@@ -9,6 +9,7 @@ class MoviesController < ApplicationController
   def index
     #@movies = Movie.all
     # Return movies with checkboxed
+    @sort_by = params[:sort_by]
     @all_ratings = ['G', 'PG', 'PG-13', 'R']
     if params[:ratings]
       @ratings_to_show = params[:ratings]
@@ -19,6 +20,10 @@ class MoviesController < ApplicationController
       end
     end
     @movies = Movie.with_ratings(@ratings_to_show)
+
+    if @sort_by
+      @movies = @movies.order(@sort_by)
+    end
   end
 
   def new
