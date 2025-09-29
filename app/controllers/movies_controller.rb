@@ -31,7 +31,7 @@ class MoviesController < ApplicationController
       end
     end
 
-    @movies = Movie.with_ratings(@ratings_to_show)
+    @movies = Movie.with_ratings(@ratings_to_show.keys)
 
     if @sort_by
       @movies = @movies.order(@sort_by)
