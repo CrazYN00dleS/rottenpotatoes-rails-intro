@@ -9,16 +9,28 @@ class MoviesController < ApplicationController
   def index
     #@movies = Movie.all
     # Return movies with checkboxed
-    @sort_by = params[:sort_by]
     @all_ratings = ['G', 'PG', 'PG-13', 'R']
+
+    if params[:sort_by].nil? && params[:ratings].nil? && (session[:sort_by] || session[:ratings])
+      redirect_to movies_path(ratings: session[:ratings], sort_by: session[:sort_by])
+      return
+    end
+
+    @sort_by = params[:sort_by]
+    if params[:sort_by]
+      session[:sort_by] = params[:sort_by]
+    end
+
     if params[:ratings]
       @ratings_to_show = params[:ratings]
+      session[:ratings] = params[:ratings]
     else
       @ratings_to_show = {}
       @all_ratings.each do |rating|
         @ratings_to_show[rating] = "1"
       end
     end
+
     @movies = Movie.with_ratings(@ratings_to_show)
 
     if @sort_by
